@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { ACTION_GET_CURRENT_WEATHER } from "./Actions"
+import { ACTION_ADD_FAVORITE_CITY, ACTION_GET_CURRENT_WEATHER, ACTION_GET_FAVORITE_WEATHER } from "./Actions"
 import Cache from "../Cache"
 
 const citiesCache = new Cache(24)
@@ -7,7 +7,7 @@ const weatherCache = new Cache(6)
 const forcastCache = new Cache(12)
 
 const api = {
-    key: "efr5pc0wjThqCLr8p6CLnStsUmWjK5A1",
+    key: "WeVUl2QFRQElk6hje5DWfLTry9TPbg9G",
     base: "http://dataservice.accuweather.com",
 }
 
@@ -16,20 +16,28 @@ const getCity = async (input) => {
     let cityResult = citiesCache.getCache(`City_${input}`)
 
     if (!cityResult) {
-        cityResult = await fetch(url)
-        cityResult = await cityResult.json()
+        try {
+            cityResult = await fetch(url)
+            cityResult = await cityResult.json()
+        } catch (e) {
+            throw e
+        }
         citiesCache.setCache(`City_${input}`, cityResult[0])
         cityResult = cityResult[0]
     }
     return cityResult
 }
 
-const getWeather = async (cityKey) => {
+const getWeather = async (cityKey, input) => {
     const url = `${api.base}/currentconditions/v1/${cityKey}?apikey=${api.key}&details=true`
-    let weatherResult = weatherCache.getCache(`Weather_${cityKey}`)
+    let weatherResult = weatherCache.getCache(`Weather_${input}`)
     if (!weatherResult) {
-        weatherResult = await fetch(url)
-        weatherResult = await weatherResult.json()
+        try {
+            weatherResult = await fetch(url)
+            weatherResult = await weatherResult.json()
+        } catch (e) {
+            throw e
+        }
         if (weatherResult && weatherResult[0]) {
             weatherResult = {
                 WeatherText: weatherResult[0].WeatherText,
@@ -37,17 +45,21 @@ const getWeather = async (cityKey) => {
             }
 
         }
-        weatherCache.setCache(`Weather_${cityKey}`, weatherResult)
+        weatherCache.setCache(`Weather_${input}`, weatherResult)
     }
     return weatherResult
 }
 
-const getForecast = async (cityKey) => {
-    const url = `${api.base}/forecasts/v1/daily/5day/${cityKey}?apikey=${api.key}&metric=true`
-    let forecast = forcastCache.getCache(`Forecast_${cityKey}`)
+const getForecast = async (cityKey, input, unit) => {
+    const url = `${api.base}/forecasts/v1/daily/5day/${cityKey}?apikey=${api.key}&metric=${unit === "Metric"}`
+    let forecast = forcastCache.getCache(`Forecast_${input}_${unit}`)
     if (!forecast) {
-        forecast = await fetch(url)
-        forecast = await forecast.json()
+        try {
+            forecast = await fetch(url)
+            forecast = await forecast.json()
+        } catch (e) {
+            throw e
+        }
         if (forecast) {
             forecast = forecast.DailyForecasts.map(daily => ({
                 day: daily.Date,
@@ -56,24 +68,24 @@ const getForecast = async (cityKey) => {
                 description: daily.Day.IconPhrase
             }))
         }
-        forcastCache.setCache(`ForecaST_${cityKey}`, forecast)
+        forcastCache.setCache(`Forecast_${input}_${unit}`, forecast)
     }
     return forecast
 }
 
 export const getCurrentWeather = createAsyncThunk(
     ACTION_GET_CURRENT_WEATHER.type,
-    async (input, { rejectWithValue, getState }) => {
+    async ({ input, unit }, { rejectWithValue }) => {
         try {
             let weatherResult
             let forecastResult
             let cityResult = await getCity(input)
 
             if (cityResult) {
-                weatherResult = await getWeather(cityResult.Key)
+                weatherResult = await getWeather(cityResult.Key, input)
             }
             if (cityResult) {
-                forecastResult = await getForecast(cityResult.Key)
+                forecastResult = await getForecast(cityResult.Key, input, unit)
             }
             return {
                 city: cityResult,
@@ -86,11 +98,14 @@ export const getCurrentWeather = createAsyncThunk(
         }
     }
 )
-
+export const addFavoriteCity = createAsyncThunk(
+    ACTION_ADD_FAVORITE_CITY.type,
+    async (input) => input
+)
 export const getFavoritesWeather = createAsyncThunk(
-    ACTION_GET_CURRENT_WEATHER.type,
-    async (arrOfCityNames, { rejectWithValue, getState }) => {
-
+    ACTION_GET_FAVORITE_WEATHER.type,
+    async (_, { rejectWithValue, getState }) => {
+        const arrOfCityNames = (({ favoriteList }) => favoriteList)(getState())
         const results = []
         try {
             arrOfCityNames.forEach(async (input) => {
@@ -98,7 +113,7 @@ export const getFavoritesWeather = createAsyncThunk(
                 let cityResult = await getCity(input)
 
                 if (cityResult) {
-                    weatherResult = await getWeather(cityResult.Key)
+                    weatherResult = await getWeather(cityResult.Key, input)
                 }
                 results.push({
                     city: cityResult,

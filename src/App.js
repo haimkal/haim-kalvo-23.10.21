@@ -1,37 +1,46 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from 'react'
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   useHistory
-} from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import './App.scss';
+} from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { connect } from 'react-redux';
-import { getCurrentWeather, getFavoritesWeather } from "./redux/AsyncThunk"
+import { getCurrentWeather, getFavoritesWeather } from './redux/AsyncThunk'
+import Header from './Header/Header';
+import Weather from './Weather/Weather';
+import Favorties from './Favorites/Favorties';
+import { UnitContext } from './unit-context'
+import './App.scss';
+
 
 
 function App() {
-  const dispatch = useDispatch()
-  const currentWeather = useSelector(({ currentWeather }) => currentWeather)
-  const currentCity = useSelector(({ currentCity }) => currentCity)
-  const getWeather = async (value) => {
-    dispatch(getCurrentWeather(value))
-    dispatch(getFavoritesWeather(['london', 'tel aviv', 'holon']))
-  }
-  // const onSearchChange = (e) => getWeather(e.target.value)
-  const onSearchKeyDown = (e) => {
-    if (e.key !== "Enter") return
-    getWeather(e.target.value)
-  }
+  const [unit, setUnit] = useState('Metric');
   return (
-    <div className="App">
-      <input
-        onKeyDown={onSearchKeyDown} />
-
-      {JSON.stringify(currentWeather, null, '\t')}
-
-    </div>
+    <UnitContext.Provider value={{ unit, setUnit }}>
+      <Router>
+        <div className="App">
+          <div className="App-container">
+            <Header />
+            <Switch>
+              <Route path="/favorites">
+                <Favorties />
+              </Route>
+              <Route path="/" exact>
+                <Weather />
+              </Route>
+            </Switch>
+          </div>
+        </div>
+      </Router>
+    </UnitContext.Provider >
   );
 }
+
+
+
+
+
 export default connect(null)(App);
