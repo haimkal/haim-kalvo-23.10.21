@@ -4,6 +4,7 @@ import { addFavoriteCity, getCurrentWeather } from '../redux/AsyncThunk'
 import { dateBuilder } from './assets/helpers/dateFunctions';
 import WeatherCard from './WeatherCard/WeatherCard';
 import { UnitContext } from '../unit-context';
+import { InputContext } from '../input-context';
 import './Weather.scss'
 import Favorties from '../Favorites/Favorties';
 import systemConfig from '../SystemConfig'
@@ -11,13 +12,13 @@ import systemConfig from '../SystemConfig'
 export default function Weather() {
     const dispatch = useDispatch()
     const { unit, setUnit } = useContext(UnitContext)
+    const { input, setInput } = useContext(InputContext)
     const currentWeather = useSelector(({ currentWeather }) => currentWeather)
     const favoriteList = useSelector(({ favoriteList }) => favoriteList)
     const currentCity = useSelector(({ currentCity }) => currentCity)
     const currentForecast = useSelector(({ currentForecast }) => currentForecast)
     const favorites = useSelector(({ favorites }) => favorites)
     const error = useSelector(({ error }) => error)
-    const [input, setInput] = useState('tel aviv')
     const getWeather = async (args) => {
         dispatch(getCurrentWeather(args))
     }
