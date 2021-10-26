@@ -45,8 +45,6 @@ export default function Weather() {
     }, [unit, input])
     return (
         <div className="weather-container">
-            {error ? <span style={{ "color": "red" }}>{error}</span> : null}
-            {!currentWeather ? <span style={{ "color": "red" }}>Type again!</span> : null}
             <div className={(currentWeather) ? ((currentWeather.Temperature.Metric.Value > 16) ? "weather-container warm" : "weather-container") : "weather-container"}>
                 <main>
                     <div className="search-box">
@@ -55,8 +53,9 @@ export default function Weather() {
                             className="search-bar"
                             placeholder="Search..."
                             onKeyDown={onSearchKeyDown} />
-                        {/* {JSON.stringify(currentWeather, null, '\t')} */}
                     </div>
+                    {error ? <span style={{ "color": "red" }}>{error}</span> : null}
+                    {!currentWeather ? <span style={{ "color": "red" }}>Type again!</span> : null}
                     {(currentWeather) ? (
                         <div className="location-weather-time-container">
                             <div className="location-box">
@@ -67,7 +66,7 @@ export default function Weather() {
                             </div>
                             <div className="weather-box">
                                 <div className="temp">
-                                    {currentWeather.Temperature[systemConfig[unit].fieldName].Value} {systemConfig[unit].symbol}
+                                    {Math.round(currentWeather.Temperature[systemConfig[unit].fieldName].Value)}{systemConfig[unit].symbol}
                                 </div>
                                 <div className="description">
                                     {currentWeather.WeatherText}
@@ -75,6 +74,7 @@ export default function Weather() {
                                 <div className="changeUnit" onClick={changeUnit}> Change unit </div>
                             </div>
                             {(currentWeather) && <button onClick={addToFavorites(currentCity.LocalizedName)}> Add to Favorites! </button>}
+                            {favoriteList.includes(currentCity.LocalizedName) && <div> this city exists </div>}
                             <div className="weatherCard-container">
                                 <div className="row justify-content-center">
                                     {(currentWeather) ? currentForecast.map((daily, index) => (

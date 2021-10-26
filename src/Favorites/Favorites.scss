@@ -1,0 +1,22 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.favorites-container {
+    background-image: url('./Images/favorites.jpg');
+    background-size: cover;
+    flex-grow: 1;
+    min-height: 100vh;
+    background-position: center;
+    position: relative;
+    background-repeat: no-repeat;
+    transition: 0.4 ease-out;
+}
+
+main {
+    min-height: 100vh;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.2),  rgba(0, 0, 0, 0.55));
+    padding: 25px;
+}

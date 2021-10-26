@@ -1,14 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+
 .Header { //mobile
     bottom: 0;
     position: fixed;
     width: 100%;
-    z-index: 1;
+    z-index: 2;
     order: 1;
-    @media screen and (min-width: 600px) { 
-        .Header{
-            position: sticky;
-            top: 0;
-            order: 0;
-        }
+}
+@media screen and (min-width: 768px) { 
+    .Header{
+        position: sticky;
+        top: 0;
+        order: 0;
     }
 }
+
+.navbar {
+    background: #fff;
+}
+
+.navbar-brand {   
+    font-weight: 700; 
+    font-size: 60px;
+    font-family: 'Permanent Marker', cursive;
+    color: black;
+    padding: 0;    
+} 
+.navbar-brand:hover {
+ color: #a1893b
+}
+
+.faCloudSun {
+    color: #2316dd;
+}
+.faCloudSun:hover {
+    color: #2e1fff;
+}
+
+.faHeart {
+    
+    color: #c50017;
+} 
+.faHeart:hover {
+    color: #ff001e
+}
+
+

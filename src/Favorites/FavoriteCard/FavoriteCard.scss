@@ -1,0 +1,77 @@
+.favoriteCard {  
+    border: 1px solid #f1f1f1;
+    margin-top: 10px ;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    @media (min-width: 768px) {
+        height: 500px;
+    }
+
+    &__location-box {
+        &__location {
+                color: #FFF;
+            font-size: 30px;
+            font-weight: 500;
+            font-style: italic;
+            text-align: center;
+            text-shadow: 3px 3px rgba(50, 50, 10, 0.5);
+            @media (min-width: 1230px) {
+                font-size: 35px;
+            }
+        }
+    }
+
+    &__weather-box {
+        &__temp {
+            width: 80%;
+            height: 140px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 10px auto;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 8px 5px;
+            color: #FFF;
+            font-size: 50px;
+            font-weight: 300;
+            text-shadow: 4px 3px rgba(50, 50, 70, 0.5);
+            text-align: center;
+            box-shadow: 3px 5px rgba(0, 0, 0, 0.2) ; 
+            @media (min-width: 1230px) {
+                font-size: 70px;
+            }
+        }
+        &__description {
+            color: #FFF;
+            font-size: 28px;
+            font-weight: 700;
+            text-shadow: 3px 3px rgba(50, 50, 70, 0.5);
+            @media (min-width: 1230px) {
+            font-size: 42px;
+    }
+        }
+    }
+    
+
+}       
+
+
+.description {
+    color: #FFF;
+    font-size: 28px;
+    font-weight: 700;
+    text-shadow: 3px 3px rgba(50, 50, 70, 0.5);
+    @media (min-width: 1230px) {
+        font-size: 33px;
+    }
+  }
+
+
+
+
+ 
