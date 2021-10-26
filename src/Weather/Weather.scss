@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&family=Permanent+Marker&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
 *{
     margin: 0;
     padding: 0;
@@ -32,7 +34,7 @@ main {
 
 .search-box {
     width: 100%;
-    margin: 0 0 60px;
+    margin: 0 0 45px;
 }
 
 .search-box .search-bar{
@@ -101,8 +103,106 @@ main {
 }
 
 .weatherCard-container {
-    margin-top: 80px;
+    margin-top: 30px;
+    @media screen and (min-width: 768px) { 
+        margin-top: 90px;
+    }
 }
-  
+
+.add-to-favorites {
+    display: flex;
+    margin-top: 10px;
+    flex-direction: column;
+    align-items:center;
+    justify-content: center;
+    height: 130px;
+    @media (min-width: 1230px) {
+        height: 30%;
+    }
+
+    .btn-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 65%;
+        @media (min-width: 1230px) {   
+            height: 30%;
+        }
+        .btnFav {
+            width: 100%;
+            font-family: 'montseratt', sans-serif;
+            text-shadow: 1px 2px rgba(252, 252, 252, 0.6);
+            border: 1px solid #f1f1f1;
+            background-color: transparent;
+            border-radius: 14px;
+            font-size: 30px;
+            font-weight: 500;
+            color: #000;  
+            @media (min-width: 1230px) {
+                font-size: 35px;
+                height: 100%;
+            }
+            .faHeart {
+                color: #c50017;
+            }
+        }
+        .btnFav:hover {
+            color: #a1893b;
+            background-color: white;
+        }
+        .btnFav:hover > .faHeart{
+            color: #ff001e;   
+        }
+    }
+    .city-exists{
+        font-family: 'montseratt', sans-serif;
+        font-size: 20px;
+        color: #ffffff;
+        text-shadow: 2px 3px rgba(50, 50, 70, 0.5);
+        @media (min-width: 1230px) {
+            font-size: 30px;
+        }
+        
+    }
+}
+.unitChange{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    .unitName{
+        width: 55%;
+        color: #FFF;
+        font-size: 22px;
+        font-weight: 300;
+        font-style: italic;
+        text-align: center;
+        text-shadow: 2px 2px rgba(50, 50, 10, 0.5);
+        @media screen and (min-width: 768px) { 
+            font-size: 30px;
+        }
+    }
+    .changeUnit {
+        width: 55%;
+        color: #FFF;
+        font-size: 22px;
+        font-weight: 300;
+        font-style: italic;
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.15);
+        text-shadow: 2px 2px rgba(50, 50, 10, 0.5);
+        box-shadow: 2px 3px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        @media screen and (min-width: 768px) { 
+            font-size: 30px;
+        }
+    }
+    .changeUnit:hover{
+        background-color: rgba(255, 255, 255, 0.521); 
+    }
+}
+
+
 
 

@@ -1,6 +1,8 @@
 import React, { useEffect, useContext, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { addFavoriteCity, getCurrentWeather } from '../redux/AsyncThunk'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { dateBuilder } from './assets/helpers/dateFunctions';
 import WeatherCard from './WeatherCard/WeatherCard';
 import { UnitContext } from '../unit-context';
@@ -57,8 +59,13 @@ export default function Weather() {
                     </div>
                     {error ? <span style={{ "color": "red" }}>{error}</span> : null}
                     {!currentWeather ? <span style={{ "color": "red" }}>Type again!</span> : null}
-                    {(currentWeather) ? (
-                        <div className="location-weather-time-container">
+
+                    {currentWeather && <div className="row">
+                        <div className="unitChange col-md-3">
+                            <div className="unitName">{unit}</div>
+                            <span className="changeUnit" onClick={changeUnit}> Change Unit! </span>
+                        </div>
+                        <div className="location-weather-time-container col-md-6">
                             <div className="location-box">
                                 <div className="location">{currentCity.LocalizedName}, {currentCity.Country.LocalizedName}</div>
                             </div>
@@ -72,24 +79,26 @@ export default function Weather() {
                                 <div className="description">
                                     {currentWeather.WeatherText}
                                 </div>
-                                <div className="changeUnit" onClick={changeUnit}> Change unit </div>
-                            </div>
-                            {(currentWeather) && <button onClick={addToFavorites(currentCity.LocalizedName)}> Add to Favorites! </button>}
-                            {favoriteList.includes(currentCity.LocalizedName) && <div> this city exists </div>}
-                            <div className="weatherCard-container">
-                                <div className="row justify-content-center">
-                                    {(currentWeather) ? currentForecast.map((daily, index) => (
-                                        <WeatherCard key={index} symbol={systemConfig[unit].symbol} day={daily.day} maxTemp={daily.maxTemp} minTemp={daily.minTemp} description={daily.description} />))
-                                        : null}
-                                </div>
-                                {/* <div className="row justify-content-center">
-                                    {(currentWeather) ? favoriteList.map((item, index) => (
-                                        <Favorites key={index} symbol={systemConfig[unit].symbol} name={favoriteList.name} />))
-                                        : null}
-                                </div> */}
                             </div>
                         </div>
-                    ) : null}
+                        <div className="add-to-favorites col-md-3">
+                            <div className="btn-container">
+                                <button className="btnFav" onClick={addToFavorites(currentCity.LocalizedName)}>
+                                    <FontAwesomeIcon icon={faHeart} className="fa-1x faHeart" />
+                                    Add to Favorites!
+                                </button>
+                            </div>
+                            {favoriteList.includes(currentCity.LocalizedName) && <div className="city-exists"> City exists in the list </div>}
+                        </div>
+
+                    </div>}
+                    <div className="weatherCard-container">
+                        <div className="row justify-content-center">
+                            {(currentWeather) ? currentForecast.map((daily, index) => (
+                                <WeatherCard key={index} symbol={systemConfig[unit].symbol} day={daily.day} maxTemp={daily.maxTemp} minTemp={daily.minTemp} description={daily.description} />))
+                                : null}
+                        </div>
+                    </div>
                 </main>
             </div>
         </div>
