@@ -8,7 +8,7 @@ const forcastCache = new Cache(12)
 
 const api = {
     key: "UAzYDIn62WRL1FzeF64c5vAvGbZcVMDE",
-    base: "http://dataservice.accuweather.com",
+    base: document.location.protocol + "//dataservice.accuweather.com",
 }
 
 const getCity = async (input) => {
