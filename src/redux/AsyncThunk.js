@@ -7,7 +7,7 @@ const weatherCache = new Cache(6)
 const forcastCache = new Cache(12)
 
 const api = {
-    key: "c9gpgnBz8DTFJFBMsOcl9rpCodmsndQk",
+    key: "UAzYDIn62WRL1FzeF64c5vAvGbZcVMDE",
     base: "http://dataservice.accuweather.com",
 }
 

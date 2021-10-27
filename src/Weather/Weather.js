@@ -14,12 +14,12 @@ import systemConfig from '../SystemConfig'
 export default function Weather() {
     const dispatch = useDispatch()
     const { unit, setUnit } = useContext(UnitContext)
-    const [input, setInput] = useState('Tel Aviv')
     const currentWeather = useSelector(({ currentWeather }) => currentWeather)
     const favoriteList = useSelector(({ favoriteList }) => favoriteList)
     const currentCity = useSelector(({ currentCity }) => currentCity)
     const currentForecast = useSelector(({ currentForecast }) => currentForecast)
     const favorites = useSelector(({ favorites }) => favorites)
+    const defaultCity = 'Tel Aviv'
     
     const getWeather = async (args) => {
         dispatch(getCurrentWeather(args))
@@ -36,15 +36,15 @@ export default function Weather() {
 
     const onSearchKeyDown = (e) => {
         if (e.key !== "Enter") return
-        setInput(e.target.value)
+        document.location.href = "/" + e.target.value
     }
 
     const addToFavorites = (cityName) => () =>
         dispatch(addFavoriteCity(cityName))
 
     useEffect(() => {
-        getWeather({ unit, input: cityName || input })
-    }, [unit, input])
+        getWeather({ unit, input: cityName || defaultCity })
+    }, [unit])
     
     return (
         <div className="weather-container">
