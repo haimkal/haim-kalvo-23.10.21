@@ -1,23 +1,17 @@
 import React, { useContext } from 'react'
-import { useSelector } from 'react-redux';
 import systemConfig from '../../SystemConfig';
 import { Link } from 'react-router-dom';
 import { UnitContext } from '../../unit-context';
-import { InputContext } from '../../input-context';
 import './FavoriteCard.scss'
 
 export default function FavoriteCard(
     { city, country, temperature, description }
 ) {
     const { unit } = useContext(UnitContext)
-    const { setInput } = useContext(InputContext);
-
-    function handleClick() {
-        setInput(city);
-    }
+    
     return (
         <div className="col-12 col-lg-3">
-            <Link onClick={handleClick} to='/' >
+            <Link to={`/${city}`} >
                 <div className="favoriteCard">
                     <div className="favoriteCard__location-box">
                         <div className="favoriteCard__location-box__location">{city}, {country}</div>

@@ -11,9 +11,8 @@ export const isolateDayOfTheWeek = (dateIso) => {
 export const dateBuilder = (d) => {
     let months = ["January", "Febuary", "March", "April", "May", "June", "July", "August",
         "September", "October", "November", "December"];
-
     let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thurday", "Friday", "Saturday"];
-
+    
     let day = days[d.getDay()];
     let date = d.getDate();
     let month = months[d.getMonth()];

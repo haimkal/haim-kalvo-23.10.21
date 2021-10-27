@@ -7,16 +7,19 @@ import FavoriteCard from './FavoriteCard/FavoriteCard'
 import './Favorites.scss';
 
 export default function Favorties() {
+    
     const dispatch = useDispatch()
     const { unit, setUnit } = useContext(UnitContext)
     const favorites = useSelector(({ favorites }) => favorites)
+    
     useEffect(() => {
         dispatch(getFavoritesWeather())
     }, [])
+    
     return (
         <div className="favorites-container">
             <main>
-                <div className="row m-3">
+                <div className="favoriteCard-container row">
                     {(favorites || []).map((fav, index) =>
                         <FavoriteCard
                             key={index}
@@ -28,7 +31,5 @@ export default function Favorties() {
                 </div>
             </main>
         </div>
-
     )
-
 }

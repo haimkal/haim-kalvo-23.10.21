@@ -1,4 +1,5 @@
 import React, { useEffect, useContext, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { addFavoriteCity, getCurrentWeather } from '../redux/AsyncThunk'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,7 +7,6 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { dateBuilder } from './assets/helpers/dateFunctions';
 import WeatherCard from './WeatherCard/WeatherCard';
 import { UnitContext } from '../unit-context';
-import { InputContext } from '../input-context';
 import './Weather.scss'
 import Favorties from '../Favorites/Favorties';
 import systemConfig from '../SystemConfig'
@@ -14,17 +14,17 @@ import systemConfig from '../SystemConfig'
 export default function Weather() {
     const dispatch = useDispatch()
     const { unit, setUnit } = useContext(UnitContext)
-    const { input, setInput } = useContext(InputContext)
+    const [input, setInput] = useState('Tel Aviv')
     const currentWeather = useSelector(({ currentWeather }) => currentWeather)
     const favoriteList = useSelector(({ favoriteList }) => favoriteList)
     const currentCity = useSelector(({ currentCity }) => currentCity)
     const currentForecast = useSelector(({ currentForecast }) => currentForecast)
     const favorites = useSelector(({ favorites }) => favorites)
-    const error = useSelector(({ error }) => error)
+    
     const getWeather = async (args) => {
         dispatch(getCurrentWeather(args))
     }
-
+    let { cityName } = useParams()
 
     const changeUnit = (e) => {
         if (unit === 'Imperial') {
@@ -32,7 +32,6 @@ export default function Weather() {
         } else {
             setUnit('Imperial')
         }
-        console.log(unit);
     }
 
     const onSearchKeyDown = (e) => {
@@ -44,8 +43,9 @@ export default function Weather() {
         dispatch(addFavoriteCity(cityName))
 
     useEffect(() => {
-        getWeather({ unit, input })
+        getWeather({ unit, input: cityName || input })
     }, [unit, input])
+    
     return (
         <div className="weather-container">
             <div className={(currentWeather) ? ((currentWeather.Temperature.Metric.Value > 16) ? "weather-container warm" : "weather-container") : "weather-container"}>
@@ -57,9 +57,7 @@ export default function Weather() {
                             placeholder="Search..."
                             onKeyDown={onSearchKeyDown} />
                     </div>
-                    {error ? <span style={{ "color": "red" }}>{error}</span> : null}
-                    {!currentWeather ? <span style={{ "color": "red" }}>Type again!</span> : null}
-
+                    {!currentWeather ? <span className="typeMalfunction">City wasn't found, please try again</span> : null}
                     {currentWeather && <div className="row">
                         <div className="unitChange col-md-3">
                             <div className="unitName">{unit}</div>
@@ -103,5 +101,4 @@ export default function Weather() {
             </div>
         </div>
     )
-
 }

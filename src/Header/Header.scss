@@ -15,8 +15,18 @@
     }
 }
 
+.header-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .navbar {
     background: #fff;
+    border-top: 3px solid black;
+    @media screen and (min-width: 768px) { 
+        border-bottom: 3px solid;
+    }
 }
 
 .navbar-brand {   
@@ -26,23 +36,86 @@
     color: black;
     padding: 0;    
 } 
+
 .navbar-brand:hover {
- color: #a1893b
+ color: #a1893b;
 }
 
 .faCloudSun {
     color: #2316dd;
 }
+
 .faCloudSun:hover {
     color: #2e1fff;
 }
 
-.faHeart {
-    
+.faHeartHeader {
     color: #c50017;
-} 
-.faHeart:hover {
-    color: #ff001e
+}
+
+.favorites-link-container:hover {
+    .faHeartHeader {
+        color: #ff001e
+    }
+    .list-name {
+        color: #a1893b
+    }
+}
+
+.navFavorties {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.list-name{
+    font-size: 24px;
+    font-family: 'Permanent Marker', cursive;
+    color: black;
+}
+
+.logo-theme{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.faLightbulb {
+    color: rgba(221, 199, 4, 0.952);
+    cursor: pointer;
+}
+
+.errorMessage {
+    border: 1px solid;
+    border-radius: 5px;
+    margin: 10px 0px;
+    padding: 5px 10px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    color: #D8000C;
+	background-color: #FFBABA;
+    position: absolute;
+    transform: translateX(-50%);
+}
+
+.error-mobile {
+    display: inline;
+    bottom: 100px;
+}
+
+.error-desktop {
+    display: none;
+}
+@media screen and (min-width: 768px) { 
+    .error-mobile {
+        display: none;
+    }
+    .error-desktop {
+        display: inline;
+        top: 100px;
+    }
 }
 
 

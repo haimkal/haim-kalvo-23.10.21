@@ -4,8 +4,9 @@ import { isolateDayOfTheWeek } from '../assets/helpers/dateFunctions'
 import './WeatherCard.scss'
 
 export default function WeatherCard({ day, minTemp, maxTemp, description, symbol }) {
-
+    
     const currentForecast = useSelector(({ currentForecast }) => currentForecast)
+
     return (
         <div className="col-12 col-lg-2">
             <div className="weatherCard">

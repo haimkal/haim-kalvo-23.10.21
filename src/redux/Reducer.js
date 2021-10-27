@@ -20,14 +20,14 @@ export default createReducer(
             state.currentCity = action.payload.city
             state.currentForecast = action.payload.forecast
         }).addCase(getCurrentWeather.rejected, (state, action) => {
-            state.error = 'getCurrent ' + action.payload
+            state.error = action.payload
 
         }).addCase(getFavoritesWeather.fulfilled, (state, action) => {
             state.error = ''
             state.favorites = action.payload
 
         }).addCase(getFavoritesWeather.rejected, (state, action) => {
-            state.error = 'getFavorites ' + action.payload
+            state.error = action.payload
 
         }).addCase(addFavoriteCity.fulfilled, (state, action) => {
             state.error = ''

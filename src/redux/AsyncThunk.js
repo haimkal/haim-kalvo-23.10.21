@@ -7,7 +7,7 @@ const weatherCache = new Cache(6)
 const forcastCache = new Cache(12)
 
 const api = {
-    key: "7PrdbN7BAxPB2G9xAncBY3kKxWhKHubh",
+    key: "MTQBPBl89AmFXqE5AremHTp4WucztafA",
     base: "http://dataservice.accuweather.com",
 }
 
@@ -100,7 +100,7 @@ export const getCurrentWeather = createAsyncThunk(
 )
 export const addFavoriteCity = createAsyncThunk(
     ACTION_ADD_FAVORITE_CITY.type,
-    async (input) => input
+    async (cityName) => cityName
 )
 export const getFavoritesWeather = createAsyncThunk(
     ACTION_GET_FAVORITE_WEATHER.type,
@@ -108,18 +108,19 @@ export const getFavoritesWeather = createAsyncThunk(
         const arrOfCityNames = (({ favoriteList }) => favoriteList)(getState())
         const results = []
         try {
-            arrOfCityNames.forEach(async (input) => {
+            for (let cityName of arrOfCityNames) {
                 let weatherResult
-                let cityResult = await getCity(input)
+                let cityResult = await getCity(cityName)
 
                 if (cityResult) {
-                    weatherResult = await getWeather(cityResult.Key, input)
+                    weatherResult = await getWeather(cityResult.Key, cityName)
                 }
                 results.push({
+                    id: cityResult.Key,
                     city: cityResult,
                     weather: weatherResult,
                 })
-            })
+            }
             return results
         }
         catch (e) {
