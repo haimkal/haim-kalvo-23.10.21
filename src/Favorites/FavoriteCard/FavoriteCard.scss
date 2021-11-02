@@ -63,6 +63,15 @@ a {
     }
 }
 
+.favoriteCard.deleted {
+    display: none;
+}
+
+.deleteCard {
+    display: flex;
+    justify-content: end;
+}
+
 .description {
     color: #FFF;
     font-size: 28px;

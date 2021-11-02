@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { ACTION_ADD_FAVORITE_CITY, ACTION_GET_CURRENT_WEATHER, ACTION_GET_FAVORITE_WEATHER } from "./Actions"
+import { ACTION_ADD_FAVORITE_CITY, ACTION_GET_CURRENT_WEATHER, ACTION_GET_FAVORITE_WEATHER, ACTION_REMOVE_CITY_FROM_FAVORITES } from "./Actions"
 import Cache from "../Cache"
 
 const citiesCache = new Cache(24)
@@ -16,12 +16,8 @@ const getCity = async (input) => {
     let cityResult = citiesCache.getCache(`City_${input}`)
 
     if (!cityResult) {
-        try {
-            cityResult = await fetch(url)
-            cityResult = await cityResult.json()
-        } catch (e) {
-            throw e
-        }
+        cityResult = await fetch(url)
+        cityResult = await cityResult.json()
         citiesCache.setCache(`City_${input}`, cityResult[0])
         cityResult = cityResult[0]
     }
@@ -32,12 +28,8 @@ const getWeather = async (cityKey, input) => {
     const url = `${api.base}/currentconditions/v1/${cityKey}?apikey=${api.key}&details=true`
     let weatherResult = weatherCache.getCache(`Weather_${input}`)
     if (!weatherResult) {
-        try {
-            weatherResult = await fetch(url)
-            weatherResult = await weatherResult.json()
-        } catch (e) {
-            throw e
-        }
+        weatherResult = await fetch(url)
+        weatherResult = await weatherResult.json()
         if (weatherResult && weatherResult[0]) {
             weatherResult = {
                 WeatherText: weatherResult[0].WeatherText,
@@ -54,12 +46,8 @@ const getForecast = async (cityKey, input, unit) => {
     const url = `${api.base}/forecasts/v1/daily/5day/${cityKey}?apikey=${api.key}&metric=${unit === "Metric"}`
     let forecast = forcastCache.getCache(`Forecast_${input}_${unit}`)
     if (!forecast) {
-        try {
-            forecast = await fetch(url)
-            forecast = await forecast.json()
-        } catch (e) {
-            throw e
-        }
+        forecast = await fetch(url)
+        forecast = await forecast.json()
         if (forecast) {
             forecast = forecast.DailyForecasts.map(daily => ({
                 day: daily.Date,
@@ -87,7 +75,7 @@ export const getCurrentWeather = createAsyncThunk(
             if (cityResult) {
                 forecastResult = await getForecast(cityResult.Key, input, unit)
             }
-            return {
+            return { //payload
                 city: cityResult,
                 weather: weatherResult,
                 forecast: forecastResult,
@@ -102,6 +90,33 @@ export const addFavoriteCity = createAsyncThunk(
     ACTION_ADD_FAVORITE_CITY.type,
     async (cityName) => cityName
 )
+
+export const removeCityFromFavorites = createAsyncThunk(
+    ACTION_REMOVE_CITY_FROM_FAVORITES.type,
+    async (cityToDelete, { getState }) => {
+        const arrOfCityNames = (({ favoriteList }) => favoriteList)(getState())
+        let result = arrOfCityNames.filter((city) => city !== cityToDelete);
+        console.log(result);
+        return result;
+    })
+// async (cityToDelete, { getState }) => {
+//     const favorites = (({ favorites }) => favorites)(getState())
+//     let result = favorites.filter((city) => city.city.LocalizedName !== cityToDelete);
+//     console.log(result);
+//     return result;
+// })
+
+
+
+// async (cityName, { getState }) => {
+//     const arrOfCityNames = (({ favoriteList }) => favoriteList)(getState())
+//     arrOfCityNames.forEach((city, index) => {
+//         if (city === cityName) {
+//             arrOfCityNames.splice(index, 1);
+//         }
+//     })
+//     console.log(arrOfCityNames);
+
 export const getFavoritesWeather = createAsyncThunk(
     ACTION_GET_FAVORITE_WEATHER.type,
     async (_, { rejectWithValue, getState }) => {
@@ -115,7 +130,7 @@ export const getFavoritesWeather = createAsyncThunk(
                 if (cityResult) {
                     weatherResult = await getWeather(cityResult.Key, cityName)
                 }
-                results.push({
+                results.push({ //payload
                     id: cityResult.Key,
                     city: cityResult,
                     weather: weatherResult,

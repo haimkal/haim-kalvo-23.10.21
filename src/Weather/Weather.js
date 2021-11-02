@@ -20,7 +20,7 @@ export default function Weather() {
     const currentForecast = useSelector(({ currentForecast }) => currentForecast)
     const favorites = useSelector(({ favorites }) => favorites)
     const defaultCity = 'Tel Aviv'
-    
+
     const getWeather = async (args) => {
         dispatch(getCurrentWeather(args))
     }
@@ -39,13 +39,13 @@ export default function Weather() {
         document.location.href = "/" + e.target.value
     }
 
-    const addToFavorites = (cityName) => () =>
+    const addToFavorites = (cityName) => () => //Q1: why do you do that?
         dispatch(addFavoriteCity(cityName))
 
     useEffect(() => {
         getWeather({ unit, input: cityName || defaultCity })
     }, [unit])
-    
+
     return (
         <div className="weather-container">
             <div className={(currentWeather) ? ((currentWeather.Temperature.Metric.Value > 16) ? "weather-container warm" : "weather-container") : "weather-container"}>
