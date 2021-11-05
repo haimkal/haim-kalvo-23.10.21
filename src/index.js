@@ -8,6 +8,7 @@ import reportWebVitals from './reportWebVitals';
 import { configure } from '@testing-library/dom';
 import { Provider } from 'react-redux';
 import Reducer from "./redux/Reducer"
+
 const store = configureStore({
   middleware: [thunk],
   reducer: Reducer

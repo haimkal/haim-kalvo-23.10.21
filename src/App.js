@@ -39,8 +39,4 @@ function App() {
   );
 }
 
-
-
-
-
 export default connect(null)(App);

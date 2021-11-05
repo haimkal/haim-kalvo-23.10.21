@@ -82,7 +82,7 @@ export const getCurrentWeather = createAsyncThunk(
             }
         }
         catch (e) {
-            return rejectWithValue(e.message)
+            return rejectWithValue(e.message) //payload
         }
     }
 )
@@ -94,28 +94,15 @@ export const addFavoriteCity = createAsyncThunk(
 export const removeCityFromFavorites = createAsyncThunk(
     ACTION_REMOVE_CITY_FROM_FAVORITES.type,
     async (cityToDelete, { getState }) => {
-        const arrOfCityNames = (({ favoriteList }) => favoriteList)(getState())
-        let result = arrOfCityNames.filter((city) => city !== cityToDelete);
-        console.log(result);
-        return result;
+        const favoriteList = (({ favoriteList }) => favoriteList)(getState())
+        let newFavoriteList = favoriteList.filter((city) => city !== cityToDelete);
+        const favorites = (({ favorites }) => favorites)(getState())
+        let newFavorites = favorites.filter((city) => city.city.LocalizedName !== cityToDelete);
+        return {
+            newFavoriteList,
+            newFavorites
+        }
     })
-// async (cityToDelete, { getState }) => {
-//     const favorites = (({ favorites }) => favorites)(getState())
-//     let result = favorites.filter((city) => city.city.LocalizedName !== cityToDelete);
-//     console.log(result);
-//     return result;
-// })
-
-
-
-// async (cityName, { getState }) => {
-//     const arrOfCityNames = (({ favoriteList }) => favoriteList)(getState())
-//     arrOfCityNames.forEach((city, index) => {
-//         if (city === cityName) {
-//             arrOfCityNames.splice(index, 1);
-//         }
-//     })
-//     console.log(arrOfCityNames);
 
 export const getFavoritesWeather = createAsyncThunk(
     ACTION_GET_FAVORITE_WEATHER.type,
@@ -139,7 +126,7 @@ export const getFavoritesWeather = createAsyncThunk(
             return results
         }
         catch (e) {
-            return rejectWithValue(e.message)
+            return rejectWithValue(e.message) //payload
         }
     }
 )

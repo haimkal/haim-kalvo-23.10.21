@@ -10,16 +10,17 @@ const defaultState = {
     error: '',
 }
 
-export default createReducer( //Q3: What's the diffrence beteen create
+export default createReducer(
     defaultState,
     (builder) => {
         builder.addCase(getCurrentWeather.fulfilled, (state, action) => {
             state.error = ''
             state.isLoading = false
-            state.currentWeather = action.payload.weather //Q2: what's wrong here?
+            state.currentWeather = action.payload.weather
             state.currentCity = action.payload.city
             state.currentForecast = action.payload.forecast
         }).addCase(getCurrentWeather.rejected, (state, action) => {
+            state.currentForecast = undefined
             state.error = action.payload
 
         }).addCase(getFavoritesWeather.fulfilled, (state, action) => {
@@ -37,12 +38,9 @@ export default createReducer( //Q3: What's the diffrence beteen create
             }
         }).addCase(removeCityFromFavorites.fulfilled, (state, action) => {
             state.error = ''
-            state.favoriteList = action.payload //is it alright?
+            state.favoriteList = action.payload.newFavoriteList
+            state.favorites = action.payload.newFavorites
             localStorage.setItem('favoriteList', JSON.stringify(state.favoriteList))
         })
-        // .addCase(removeCityFromFavorites.fulfilled, (state, action) => {
-        //     state.error = ''
-        //     state.favorites = action.payload 
-        // })
     }
 )

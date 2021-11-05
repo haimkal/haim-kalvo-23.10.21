@@ -8,7 +8,6 @@ import { dateBuilder } from './assets/helpers/dateFunctions';
 import WeatherCard from './WeatherCard/WeatherCard';
 import { UnitContext } from '../unit-context';
 import './Weather.scss'
-import Favorties from '../Favorites/Favorties';
 import systemConfig from '../SystemConfig'
 
 export default function Weather() {
@@ -18,7 +17,6 @@ export default function Weather() {
     const favoriteList = useSelector(({ favoriteList }) => favoriteList)
     const currentCity = useSelector(({ currentCity }) => currentCity)
     const currentForecast = useSelector(({ currentForecast }) => currentForecast)
-    const favorites = useSelector(({ favorites }) => favorites)
     const defaultCity = 'Tel Aviv'
 
     const getWeather = async (args) => {
@@ -92,9 +90,9 @@ export default function Weather() {
                     </div>}
                     <div className="weatherCard-container">
                         <div className="row justify-content-center">
-                            {(currentWeather) ? currentForecast.map((daily, index) => (
+                            {(currentForecast || []).map((daily, index) => (
                                 <WeatherCard key={index} symbol={systemConfig[unit].symbol} day={daily.day} maxTemp={daily.maxTemp} minTemp={daily.minTemp} description={daily.description} />))
-                                : null}
+                            }
                         </div>
                     </div>
                 </main>

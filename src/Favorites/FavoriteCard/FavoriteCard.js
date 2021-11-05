@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import systemConfig from '../../SystemConfig';
 import { Link } from 'react-router-dom';
 import { UnitContext } from '../../unit-context';
@@ -10,18 +10,16 @@ export default function FavoriteCard(
     { city, country, temperature, description }
 ) {
     const { unit } = useContext(UnitContext)
-    const [deleted, setDeleted] = useState(false);
     const dispatch = useDispatch()
 
     const removeCity = (city) => () => {
-        setDeleted(true)
         dispatch(removeCityFromFavorites(city))
     }
 
     return (
         <div className="col-12 col-lg-3">
             <Link to={`/${city}`} >
-                <div className={deleted ? "favoriteCard deleted" : "favoriteCard"}>
+                <div className={"favoriteCard"}>
                     <div className="favoriteCard__location-box">
                         <div className="favoriteCard__location-box__location">{city}, {country}</div>
                     </div>
@@ -36,7 +34,7 @@ export default function FavoriteCard(
                 </div>
             </Link >
             <div className="deleteCard">
-                {!deleted && <button onClick={removeCity(city)}>Delete</button>}
+                <button onClick={removeCity(city)}>Delete</button>
             </div>
         </div >
     )

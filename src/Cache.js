@@ -7,11 +7,17 @@ const milliSeconds = 1000
 class Cache {
     constructor(noOfHoursToCache) {
         this.cacheTime = (!noOfHoursToCache ? 12 : noOfHoursToCache) * minutes * seconds * milliSeconds
-        cache = JSON.parse(localStorage.getItem('weather_app_cache') || '{}')
+        try {
+            cache = JSON.parse(localStorage.getItem('weather_app_cache') || '{}')
+        }
+        catch {
+            cache = {}
+        }
     }
     setCache(key, value) {
         const element = {
             timeStamp: new Date().valueOf(),
+            cacheTime: this.cacheTime,
             value
         }
         cache[key.toLowerCase()] = element
