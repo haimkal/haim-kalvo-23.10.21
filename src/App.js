@@ -15,6 +15,7 @@ import { ModeContext } from './mode-context';
 function App() {
   const [unit, setUnit] = useState('Metric');
   const [mode, setMode] = useState('light');
+  //"/:cityName?" -> Defining optinal param
 
   return (
     <UnitContext.Provider value={{ unit, setUnit }}>

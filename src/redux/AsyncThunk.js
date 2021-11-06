@@ -7,7 +7,7 @@ const weatherCache = new Cache(6)
 const forcastCache = new Cache(12)
 
 const api = {
-    key: "UAzYDIn62WRL1FzeF64c5vAvGbZcVMDE",
+    key: "9kyVWX2luzvi5sGk6x7Ul0cMURGimFyg",
     base: document.location.protocol + "//dataservice.accuweather.com",
 }
 
@@ -65,9 +65,9 @@ export const getCurrentWeather = createAsyncThunk(
     ACTION_GET_CURRENT_WEATHER.type,
     async ({ input, unit }, { rejectWithValue }) => {
         try {
-            let weatherResult
-            let forecastResult
-            let cityResult = await getCity(input)
+            let weatherResult;
+            let forecastResult;
+            let cityResult = await getCity(input);
 
             if (cityResult) {
                 weatherResult = await getWeather(cityResult.Key, input)
