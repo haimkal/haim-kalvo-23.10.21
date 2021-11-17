@@ -32,7 +32,7 @@ export default createReducer(
 
         }).addCase(addFavoriteCity.fulfilled, (state, action) => {
             state.error = ''
-            if (!state.favoriteList.includes(action.payload)) {
+            if (!(state.favoriteList.findIndex(element => element.Key === action.payload.Key) + 1)) {
                 state.favoriteList = [...state.favoriteList, action.payload]
                 localStorage.setItem('favoriteList', JSON.stringify(state.favoriteList))
             }

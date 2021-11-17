@@ -23,10 +23,10 @@ export default function Favorties() {
                     {favorites.map((fav, index) =>
                         <FavoriteCard
                             key={index}
-                            city={fav.city.LocalizedName}
-                            country={fav.city.Country.LocalizedName}
-                            temperature={fav.weather.Temperature[systemConfig[unit].fieldName].Value}
-                            description={fav.weather.WeatherText}
+                            city={fav.city}
+                            country={fav.country}
+                            temperature={fav.temperature[systemConfig[unit].fieldName].Value}
+                            description={fav.weatherText}
                         />
                     )}
                 </div>

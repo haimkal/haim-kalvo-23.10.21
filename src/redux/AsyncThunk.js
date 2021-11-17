@@ -7,14 +7,13 @@ const weatherCache = new Cache(6)
 const forcastCache = new Cache(12)
 
 const api = {
-    key: "PJAnwz7F02noJd5fL4Gilz1qeZmzNPr7",
+    key: "PzKniPLSoJ1Tx7X8ZNLFFQOHGidDl5AT",
     base: document.location.protocol + "//dataservice.accuweather.com",
 }
 
 const getCity = async (input) => {
     const url = `${api.base}/locations/v1/cities/autocomplete?apikey=${api.key}&q=${input}`
     let cityResult = citiesCache.getCache(`City_${input}`)
-
     if (!cityResult) {
         cityResult = await fetch(url)
         cityResult = await cityResult.json()
@@ -24,9 +23,9 @@ const getCity = async (input) => {
     return cityResult
 }
 
-const getWeather = async (cityKey, input) => {
+const getWeather = async (cityKey, input, countryName) => {
     const url = `${api.base}/currentconditions/v1/${cityKey}?apikey=${api.key}&details=true`
-    let weatherResult = weatherCache.getCache(`Weather_${input}`)
+    let weatherResult = weatherCache.getCache(`Weather_${input}_${countryName}`)
     if (!weatherResult) {
         weatherResult = await fetch(url)
         weatherResult = await weatherResult.json()
@@ -34,10 +33,13 @@ const getWeather = async (cityKey, input) => {
             weatherResult = {
                 WeatherText: weatherResult[0].WeatherText,
                 Temperature: weatherResult[0].Temperature,
+                Key: cityKey,
+                CountryName: countryName,
+                LocalizedName: input
             }
 
         }
-        weatherCache.setCache(`Weather_${input}`, weatherResult)
+        weatherCache.setCache(`Weather_${input}_${countryName}`, weatherResult)
     }
     return weatherResult
 }
@@ -88,16 +90,16 @@ export const getCurrentWeather = createAsyncThunk(
 )
 export const addFavoriteCity = createAsyncThunk(
     ACTION_ADD_FAVORITE_CITY.type,
-    async (cityName) => cityName
+    async (city) => city
 )
 
 export const removeCityFromFavorites = createAsyncThunk(
     ACTION_REMOVE_CITY_FROM_FAVORITES.type,
     async (cityToDelete, { getState }) => {
         const favoriteList = (({ favoriteList }) => favoriteList)(getState())
-        let newFavoriteList = favoriteList.filter((city) => city !== cityToDelete);
+        let newFavoriteList = favoriteList.filter((city) => city.Key !== cityToDelete.Key);
         const favorites = (({ favorites }) => favorites)(getState())
-        let newFavorites = favorites.filter((city) => city.city.LocalizedName !== cityToDelete);
+        let newFavorites = favorites.filter((city) => city.city.Key !== cityToDelete.Key);
         return {
             newFavoriteList,
             newFavorites
@@ -107,22 +109,27 @@ export const removeCityFromFavorites = createAsyncThunk(
 export const getFavoritesWeather = createAsyncThunk(
     ACTION_GET_FAVORITE_WEATHER.type,
     async (_, { rejectWithValue, getState }) => {
-        const arrOfCityNames = (({ favoriteList }) => favoriteList)(getState())
+        const arrOfCities = (({ favoriteList }) => favoriteList)(getState())
         const results = []
+        let resultsFromPromise = []
+        const promiseRequests = []
         try {
-            for (let cityName of arrOfCityNames) {
+            debugger
+            for (let city of arrOfCities) {
                 let weatherResult
-                let cityResult = await getCity(cityName)
-
-                if (cityResult) {
-                    weatherResult = await getWeather(cityResult.Key, cityName)
-                }
-                results.push({ //payload
-                    id: cityResult.Key,
-                    city: cityResult,
-                    weather: weatherResult,
-                })
+                promiseRequests.push(getWeather(city.Key, city.LocalizedName, city.Country.LocalizedName))
             }
+
+            resultsFromPromise = await Promise.all(promiseRequests)
+            resultsFromPromise.forEach(result =>
+                results.push({ //payload
+                    // id: result.Key,
+                    city: result.LocalizedName,
+                    country: result.CountryName,
+                    temperature: result.Temperature,
+                    weatherText: result.WeatherText
+                }))
+
             return results
         }
         catch (e) {

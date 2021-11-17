@@ -37,8 +37,8 @@ export default function Weather() {
         document.location.href = "/" + e.target.value
     }
 
-    const addToFavorites = (cityName) => () => //Q1: why do you do that?
-        dispatch(addFavoriteCity(cityName))
+    const addToFavorites = (city) => () =>
+        dispatch(addFavoriteCity(city))
 
     useEffect(() => {
         getWeather({ unit, input: cityName || defaultCity })
@@ -79,7 +79,7 @@ export default function Weather() {
                         </div>
                         <div className="add-to-favorites col-md-3">
                             <div className="btn-container">
-                                <button className="btnFav" onClick={addToFavorites(currentCity.LocalizedName)}>
+                                <button className="btnFav" onClick={addToFavorites(currentCity)}>
                                     <FontAwesomeIcon icon={faHeart} className="fa-1x faHeart" />
                                     Add to Favorites!
                                 </button>
