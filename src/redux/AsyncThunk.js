@@ -72,7 +72,7 @@ export const getCurrentWeather = createAsyncThunk(
             let cityResult = await getCity(input);
 
             if (cityResult) {
-                weatherResult = await getWeather(cityResult.Key, input)
+                weatherResult = await getWeather(cityResult.Key, input, cityResult.Country.LocalizedName)
             }
             if (cityResult) {
                 forecastResult = await getForecast(cityResult.Key, input, unit)
@@ -114,7 +114,6 @@ export const getFavoritesWeather = createAsyncThunk(
         let resultsFromPromise = []
         const promiseRequests = []
         try {
-            debugger
             for (let city of arrOfCities) {
                 let weatherResult
                 promiseRequests.push(getWeather(city.Key, city.LocalizedName, city.Country.LocalizedName))
