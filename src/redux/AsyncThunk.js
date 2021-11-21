@@ -97,9 +97,10 @@ export const removeCityFromFavorites = createAsyncThunk(
     ACTION_REMOVE_CITY_FROM_FAVORITES.type,
     async (cityToDelete, { getState }) => {
         const favoriteList = (({ favoriteList }) => favoriteList)(getState())
-        let newFavoriteList = favoriteList.filter((city) => city.Key !== cityToDelete.Key);
+        console.log(favoriteList[0].LocalizedName);
+        let newFavoriteList = favoriteList.filter((city) => city.LocalizedName !== cityToDelete);
         const favorites = (({ favorites }) => favorites)(getState())
-        let newFavorites = favorites.filter((city) => city.city.Key !== cityToDelete.Key);
+        let newFavorites = favorites.filter((city) => city.city !== cityToDelete);
         return {
             newFavoriteList,
             newFavorites
@@ -122,7 +123,7 @@ export const getFavoritesWeather = createAsyncThunk(
             resultsFromPromise = await Promise.all(promiseRequests)
             resultsFromPromise.forEach(result =>
                 results.push({ //payload
-                    // id: result.Key,
+                    key: result.Key,
                     city: result.LocalizedName,
                     country: result.CountryName,
                     temperature: result.Temperature,
