@@ -17,6 +17,7 @@ const getCity = async (input) => {
     if (!cityResult) {
         cityResult = await fetch(url)
         cityResult = await cityResult.json()
+        console.log(cityResult)
         citiesCache.setCache(`City_${input}`, cityResult[0])
         cityResult = cityResult[0]
     }

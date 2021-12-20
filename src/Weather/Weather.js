@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { addFavoriteCity, getCurrentWeather } from '../redux/AsyncThunk'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useHistory } from 'react-router';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { dateBuilder } from './assets/helpers/dateFunctions';
 import WeatherCard from './WeatherCard/WeatherCard';
@@ -12,6 +13,7 @@ import systemConfig from '../SystemConfig'
 
 export default function Weather() {
     const dispatch = useDispatch()
+    const history = useHistory()
     const { unit, setUnit } = useContext(UnitContext)
     const currentWeather = useSelector(({ currentWeather }) => currentWeather)
     const favoriteList = useSelector(({ favoriteList }) => favoriteList)
@@ -34,7 +36,8 @@ export default function Weather() {
 
     const onSearchKeyDown = (e) => {
         if (e.key !== "Enter") return
-        document.location.href = "/" + e.target.value
+        history.push(`/${e.target.value}`);
+        getWeather({ unit, input: e.target.value })
     }
 
     const addToFavorites = (city) => () =>
@@ -53,7 +56,8 @@ export default function Weather() {
                             type="text"
                             className="search-bar"
                             placeholder="Search..."
-                            onKeyDown={onSearchKeyDown} />
+                            onKeyDown={onSearchKeyDown}
+                        />
                     </div>
                     {!currentWeather ? <span className="typeMalfunction">City wasn't found, please try again</span> : null}
                     {currentWeather && <div className="row">
